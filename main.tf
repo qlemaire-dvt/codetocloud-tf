@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 module "servers" {
-  count = 4
+  count = 1
   source = "./server"
 
   trigram = "sba-${count.index}"

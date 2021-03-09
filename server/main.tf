@@ -3,7 +3,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "main" {
-  name     = "${var.prefix}-resources-${var.trigram}"
+  #name     = "${var.prefix}-resources-${var.trigram}"
+  name     = "${var.prefix}-resources" #quick fix to have all the vm's in the same resource group
   location = var.location
 }
 
