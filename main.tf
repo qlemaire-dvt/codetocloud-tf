@@ -96,7 +96,7 @@ resource "azurerm_network_security_rule" "workshop-api" {
   source_port_range           = "*"
   destination_port_range      = "3001"
   source_address_prefix       = "*"
-  destination_address_prefix  = "*"
+#  destination_address_prefix  = "*"
   destination_address_prefix  = azurerm_public_ip.pip.ip_address
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.workshop-trafic.name
@@ -104,7 +104,7 @@ resource "azurerm_network_security_rule" "workshop-api" {
 
 resource "azurerm_network_interface_security_group_association" "main" {
   network_interface_id      = azurerm_network_interface.internal.id
-  network_security_group_id = azurerm_network_security_group.webserver.id
+  network_security_group_id = azurerm_network_security_group.workshop-trafic.id
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
