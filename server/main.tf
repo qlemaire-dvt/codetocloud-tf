@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "main" {
   #name     = "${var.prefix}-resources-${var.trigram}"
   name     = "${var.prefix}-resources" #quick fix to have all the vm's in the same resource group
@@ -69,7 +65,7 @@ resource "azurerm_network_security_rule" "workshop-ssh" {
   source_port_range           = "*"
   source_address_prefix       = "*"
   destination_port_range      = "22"
-  destination_address_prefix  = azurerm_public_ip.pip.ip_address
+  destination_address_prefix  = "*"
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.workshop-trafic.name
 }
@@ -83,7 +79,7 @@ resource "azurerm_network_security_rule" "workshop-web" {
   source_port_range           = "*"
   destination_port_range      = "3000"
   source_address_prefix       = "*"
-  destination_address_prefix  = azurerm_public_ip.pip.ip_address
+  destination_address_prefix  = "*"
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.workshop-trafic.name
 }
@@ -97,27 +93,19 @@ resource "azurerm_network_security_rule" "workshop-api" {
   source_port_range           = "*"
   destination_port_range      = "3001"
   source_address_prefix       = "*"
-  destination_address_prefix  = azurerm_public_ip.pip.ip_address
+  destination_address_prefix  = "*"
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.workshop-trafic.name
 }
 
-resource "azurerm_resource_group" "image_rg" {
-  name		= "CodeToCloud-QLE"
-  location	= "West Europe"
-}
-
-resource "azurerm_image" "os_image" {
-  name			= "ubuntu-workshop-image-v1"
-  location		= "West Europe"
-  resource_group_name	= azurerm_resource_group.image_rg.name
-
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    size_gb  = 30
-  }
-}
+#data "azurerm_resource_group" "image_rg" {
+#  name		= "CodeToCloud-QLE"
+#}
+#
+#data "azurerm_image" "os_image" {
+#  name			= "ubuntu-workshop-image-v1"
+#  resource_group_name	= data.azurerm_resource_group.image_rg.name
+#  }
 
 resource "azurerm_network_interface_security_group_association" "main" {
   network_interface_id      = azurerm_network_interface.internal.id
@@ -142,4 +130,12 @@ resource "azurerm_linux_virtual_machine" "main" {
     storage_account_type = "Standard_LRS"
   }
 
+  source_image_reference {
+    id = "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CodeToCloud-QLE/providers/Microsoft.Compute/images/ubuntu-workshop-image-v1"
+  }
+}
 
+output "public_ip_id" {
+  description = "id of the public ip address provisoned."
+  value       = azurerm_public_ip.pip.id
+}
