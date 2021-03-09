@@ -131,10 +131,10 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
 }
 
-  source_image_reference {
+  source_image_id {
     id = "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CodeToCloud-QLE/providers/Microsoft.Compute/images/ubuntu-workshop-image-v1"
   }
-}
+
 
 output "public_ip_id" {
   description = "id of the public ip address provisoned."
