@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "main" {
   #name     = "${var.prefix}-resources-${var.trigram}"
   name     = "${var.prefix}-resources" #quick fix to have all the vm's in the same resource group
@@ -141,5 +137,6 @@ resource "azurerm_linux_virtual_machine" "main" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
+}
 
 
