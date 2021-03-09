@@ -96,39 +96,49 @@ resource "azurerm_network_security_rule" "workshop-api" {
   source_port_range           = "*"
   destination_port_range      = "3001"
   source_address_prefix       = "*"
-  destination_address_prefix  = "*"
   destination_address_prefix  = azurerm_public_ip.pip.ip_address
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.workshop-trafic.name
 }
 
+resource "azurerm_resource_group" "image_rg" {
+  name		= "CodeToCloud-QLE"
+  location	= "West Europe"
+}
+
+resource "azurerm_image" "os_image" {
+  name			= "ubuntu-workshop-image-v1"
+  location		= "West Europe"
+  resource_group_name	= azurerm_resource_group.image_rg.name
+
+  os_disk {
+    os_type  = "Linux"
+    os_state = "Generalized"
+    size_gb  = 30
+  }
+}
+
 resource "azurerm_network_interface_security_group_association" "main" {
   network_interface_id      = azurerm_network_interface.internal.id
-  network_security_group_id = azurerm_network_security_group.webserver.id
+  network_security_group_id = azurerm_network_security_group.workshop-trafic.id
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
   name                            = "${var.prefix}-vm-${var.trigram}"
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
-  size                            = "Standard_F2"
+  size                            = "Standard_B2s"
   admin_username                  = "adminuser"
-  admin_password                  = "P@ssw0rd1234!"
+  admin_password                  = "C0deToCloud!"
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.main.id,
     azurerm_network_interface.internal.id,
   ]
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
-    version   = "latest"
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
   }
 
-  os_disk {
-    storage_account_type = "Standard_LRS"
-    caching              = "ReadWrite"
-  }
 }
