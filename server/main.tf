@@ -116,7 +116,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
   size                            = "Standard_B2s"
-  admin_username                  = ${var.default_user}
+  admin_username                  = var.default_user
   admin_password                  = var.admin_password
   source_image_id 		  = data.azurerm_image.os_image.id 
   disable_password_authentication = false
@@ -131,7 +131,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
 
   provisioner "remote-exec" {
-    inline = "usermod -aG docker ${var.default_user}"
+    inline = "sudo usermod -aG docker ${var.default_user}"
 
     connection {
       type	= "ssh"
