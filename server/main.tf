@@ -102,7 +102,7 @@ data "azurerm_resource_group" "image_rg" {
 }
 
 data "azurerm_image" "os_image" {
-  name			= "ubuntu-workshop-image-v1"
+  name			= "ubuntu-workshop-image-v2"
   resource_group_name	= data.azurerm_resource_group.image_rg.name
   }
 
@@ -116,7 +116,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
   size                            = "Standard_B2s"
-  admin_username                  = "adminuser"
+  admin_username                  = ${var.default_user}
   admin_password                  = "C0deToCloud!"
   source_image_id 		  = data.azurerm_image.os_image.id 
   disable_password_authentication = false
@@ -130,7 +130,9 @@ resource "azurerm_linux_virtual_machine" "main" {
     storage_account_type = "Standard_LRS"
   }
 
-
+  provisioner "local-exec" {
+    command = "usermod -aG docker ${var.default_user}"
+  }
   
 }
 

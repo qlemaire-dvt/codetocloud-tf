@@ -28,3 +28,8 @@ variable "server_count" {
   default = 1
 }
 
+variable "default_user" {
+  description = "User that will be created and added to Docker group"
+  type = string
+  default = "workshop-user"
+
