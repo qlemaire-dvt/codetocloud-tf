@@ -1,6 +1,5 @@
 resource "azurerm_resource_group" "main" {
-  #name     = "${var.prefix}-resources-${var.trigram}"
-  name     = "${var.prefix}-resources" #quick fix to have all the vm's in the same resource group
+  name     = "${var.prefix}-resources-${var.trigram}"
   location = var.location
 }
 
@@ -98,14 +97,14 @@ resource "azurerm_network_security_rule" "workshop-api" {
   network_security_group_name = azurerm_network_security_group.workshop-trafic.name
 }
 
-#data "azurerm_resource_group" "image_rg" {
-#  name		= "CodeToCloud-QLE"
-#}
-#
-#data "azurerm_image" "os_image" {
-#  name			= "ubuntu-workshop-image-v1"
-#  resource_group_name	= data.azurerm_resource_group.image_rg.name
-#  }
+data "azurerm_resource_group" "image_rg" {
+  name		= "CodeToCloud-QLE"
+}
+
+data "azurerm_image" "os_image" {
+  name			= "ubuntu-workshop-image-v1"
+  resource_group_name	= data.azurerm_resource_group.image_rg.name
+  }
 
 resource "azurerm_network_interface_security_group_association" "main" {
   network_interface_id      = azurerm_network_interface.internal.id
@@ -119,7 +118,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                            = "Standard_B2s"
   admin_username                  = "adminuser"
   admin_password                  = "C0deToCloud!"
-  source_image_id = "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CodeToCloud-QLE/providers/Microsoft.Compute/images/ubuntu-workshop-image-v1"
+  source_image_id 		  = data.azurerm_image.os_image.id 
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.main.id,
@@ -137,5 +136,15 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 output "public_ip_id" {
   description = "id of the public ip address provisoned."
-  value       = azurerm_public_ip.pip.id
+  value       = azurerm_public_ip.pip.*.ip_address
+}
+
+output "public_from_vm_id" {
+  description = "id of the public ip from vm"
+  value       = azurerm_linux_virtual_machine.main.public_ip_address
+}
+
+output "image_id" {
+  description = "id of image"
+  value       = data.azurerm_image.os_image.id
 }
