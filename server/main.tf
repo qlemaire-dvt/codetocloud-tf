@@ -127,16 +127,17 @@ resource "azurerm_linux_virtual_machine" "main" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "Premium_LRS"
   }
 
   provisioner "remote-exec" {
-    inline = "sudo usermod -aG docker ${var.default_user}"
+    inline = ["sudo usermod -aG docker ${var.default_user}"]
 
     connection {
       type	= "ssh"
-      user	= "${var.default_user}"
-      password 	= "${var.admin_password}"
+      user	= var.default_user
+      password 	= var.admin_password
+      host 	= azurerm_linux_virtual_machine.main.public_ip_address
     }
   }
   
