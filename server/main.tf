@@ -117,7 +117,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   location                        = azurerm_resource_group.main.location
   size                            = "Standard_B2s"
   admin_username                  = ${var.default_user}
-  admin_password                  = "C0deToCloud!"
+  admin_password                  = var.admin_password
   source_image_id 		  = data.azurerm_image.os_image.id 
   disable_password_authentication = false
   network_interface_ids = [
@@ -130,8 +130,14 @@ resource "azurerm_linux_virtual_machine" "main" {
     storage_account_type = "Standard_LRS"
   }
 
-  provisioner "local-exec" {
-    command = "usermod -aG docker ${var.default_user}"
+  provisioner "remote-exec" {
+    inline = "usermod -aG docker ${var.default_user}"
+
+    connection {
+      type	= "ssh"
+      user	= "${var.default_user}"
+      password 	= "${var.admin_password}"
+    }
   }
   
 }

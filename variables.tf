@@ -32,4 +32,10 @@ variable "default_user" {
   description = "User that will be created and added to Docker group"
   type = string
   default = "workshop-user"
+}
 
+variable "admin_password" {
+  description = "Password for admin user"
+  type = string
+  default = "C0deToCloud!"
+}
