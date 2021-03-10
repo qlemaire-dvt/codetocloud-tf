@@ -102,7 +102,7 @@ data "azurerm_resource_group" "image_rg" {
 }
 
 data "azurerm_image" "os_image" {
-  name			= "ubuntu-workshop-image-v2"
+  name			= "ubuntu-workshop-image-v3"
   resource_group_name	= data.azurerm_resource_group.image_rg.name
   }
 
@@ -127,9 +127,9 @@ resource "azurerm_linux_virtual_machine" "main" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
+    storage_account_type = "Standard_LRS"
   }
-
+  
   provisioner "remote-exec" {
     inline = ["sudo usermod -aG docker ${var.default_user}"]
 
@@ -157,3 +157,19 @@ output "image_id" {
   description = "id of image"
   value       = data.azurerm_image.os_image.id
 }
+
+#resource "azurerm_managed_disk" "data" {
+#  name                 = "${azurerm_linux_virtual_machine.main.name}-disk1"
+#  location             = azurerm_resource_group.main.location
+#  resource_group_name  = azurerm_resource_group.main.name
+#  storage_account_type = "Standard_LRS"
+#  create_option        = "Empty"
+#  disk_size_gb         = 10
+#}
+#
+#resource "azurerm_virtual_machine_data_disk_attachment" "data" {
+#  managed_disk_id    = azurerm_managed_disk.data.id
+#  virtual_machine_id = azurerm_linux_virtual_machine.main.id
+#  lun                = "10"
+#  caching            = "None"
+#}
