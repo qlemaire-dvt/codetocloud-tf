@@ -1,6 +1,5 @@
 resource "azurerm_resource_group" "main" {
-  #name     = "${var.prefix}-resources-${var.trigram}"
-  name     = "${var.prefix}-resources" #quick fix to have all the vm's in the same resource group
+  name     = "${var.prefix}-resources-${var.trigram}"
   location = var.location
 }
 
@@ -119,8 +118,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                            = "Standard_B2s"
   admin_username                  = "adminuser"
   admin_password                  = "C0deToCloud!"
-  source_image_id = "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CodeToCloud-QLE/providers/Microsoft.Compute/images/ubuntu-workshop-image-v1"
-  #source_image_id = "data.azurerm_image.os_image.id"
+  source_image_id 		  = var.os_image
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.main.id,
@@ -138,7 +136,7 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 output "public_ip_id" {
   description = "id of the public ip address provisoned."
-  value       = azurerm_public_ip.pip.id
+  value       = azurerm_public_ip.pip.*.ip_address
 }
 
 output "image_id" {

@@ -3,9 +3,13 @@ provider "azurerm" {
 }
 
 module "servers" {
-  count = 1
+  count = var.server_count 
   source = "./server"
 
-  trigram = "sba-${count.index}"
+  trigram = "${var.server_trigram}-${count.index}"
+  location = var.server_location
+  prefix = var.server_prefix
+ 
+  os_image = var.server_os_image
 
 }
