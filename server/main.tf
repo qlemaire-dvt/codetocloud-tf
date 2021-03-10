@@ -119,6 +119,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                            = "Standard_B2s"
   admin_username                  = "adminuser"
   admin_password                  = "C0deToCloud!"
+  source_image_id = "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CodeToCloud-QLE/providers/Microsoft.Compute/images/ubuntu-workshop-image-v1"
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.main.id,
@@ -129,12 +130,10 @@ resource "azurerm_linux_virtual_machine" "main" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
+
+
+  
 }
-
-  source_image_id {
-    id = "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CodeToCloud-QLE/providers/Microsoft.Compute/images/ubuntu-workshop-image-v1"
-  }
-
 
 output "public_ip_id" {
   description = "id of the public ip address provisoned."
