@@ -118,7 +118,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                            = "Standard_B2s"
   admin_username                  = "adminuser"
   admin_password                  = "C0deToCloud!"
-  source_image_id 		  = var.os_image
+  source_image_id 		  = data.azurerm_image.os_image.id 
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.main.id,
@@ -137,6 +137,11 @@ resource "azurerm_linux_virtual_machine" "main" {
 output "public_ip_id" {
   description = "id of the public ip address provisoned."
   value       = azurerm_public_ip.pip.*.ip_address
+}
+
+output "public_from_vm_id" {
+  description = "id of the public ip from vm"
+  value       = azurerm_linux_virtual_machine.main.public_ip_address
 }
 
 output "image_id" {

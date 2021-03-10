@@ -10,6 +10,6 @@ module "servers" {
   location = var.server_location
   prefix = var.server_prefix
  
-  os_image = var.server_os_image
+  #os_image = var.server_os_image
 
 }
