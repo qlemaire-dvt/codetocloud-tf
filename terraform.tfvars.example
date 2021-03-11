@@ -1,6 +1,12 @@
 server_prefix = "LAB-git-workshop"
 server_location = "westeurope"
 server_trigram = "qlm"
-server_os_image = "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CodeToCloud-QLE/providers/Microsoft.Compute/images/ubuntu-workshop-image-v1"
 
-server_count = 3
+server_count = 2
+
+user = "workshop-user"
+password = "changeme"
+
+personal_image = "ubuntu-workshop-image-v3"
+personal_image_rg = "CodeToCloud-QLE"
+
