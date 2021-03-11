@@ -98,11 +98,11 @@ resource "azurerm_network_security_rule" "workshop-api" {
 }
 
 data "azurerm_resource_group" "image_rg" {
-  name		= "CodeToCloud-QLE"
+  name          = var.imagerg
 }
 
 data "azurerm_image" "os_image" {
-  name			= "ubuntu-workshop-image-v3"
+  name                  = var.osimage
   resource_group_name	= data.azurerm_resource_group.image_rg.name
   }
 

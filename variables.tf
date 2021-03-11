@@ -28,14 +28,25 @@ variable "server_count" {
   default = 1
 }
 
-variable "default_user" {
+variable "user" {
   description = "User that will be created and added to Docker group"
   type = string
-  default = "workshop-user"
+  default = "default-user"
 }
 
-variable "admin_password" {
+variable "password" {
   description = "Password for admin user"
   type = string
-  default = "C0deToCloud!"
+  default = "changeme"
+}
+
+variable "personal_image" {
+  description = "name of the azure image"
+  type = string
+  default = "ubuntu-workshop-image-v3"
+}
+variable "personal_image_rg" {
+  description = "name of iamge resource group"
+  type = string
+  default = "CodeToCloud-QLE"
 }

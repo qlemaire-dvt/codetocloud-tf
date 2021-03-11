@@ -33,3 +33,15 @@ variable "admin_password" {
   type = string
   default = "C0deToCloud!"
 }
+
+variable "osimage" {
+  description = "name of the azure image"
+  type = string
+  default = "ubuntu-workshop-image-v3"
+}
+variable "imagerg" {
+  description = "name of iamge resource group"
+  type = string
+  default = "CodeToCloud-QLE"
+}
+
